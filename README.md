@@ -40,6 +40,7 @@ Elevate your communication strategy with the Readability Analyzer Plugin for Hex
 
     pip install spacy
     pip install textstat
+    pip install pyenchant
     pip install https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.5.0/en_core_web_sm-3.5.0.tar.gz
     python3 -m spacy validate
     python3 -m spacy download en_core_web_sm
