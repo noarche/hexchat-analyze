@@ -49,7 +49,6 @@ def calculate_readability(sentence):
     :param sentence: The sentence to calculate readability for
     :return: Dale-Chall readability score and the corresponding grade level
     """
-
     readability_score = textstat.dale_chall_readability_score(sentence)
     
     if readability_score <= 4.9:
@@ -68,17 +67,20 @@ def calculate_readability(sentence):
     return readability_score, grade_level
 
 if __name__ == "__main__":
-    print("Enter a sentence to analyze (or press Enter for a default sentence):")
-    sentence = input().strip() or "The quick brown fox jumps over the lazy dog."
-    
+    while True:
+        print("Enter a sentence to analyze (or press Enter for a default sentence):")
+        sentence = input().strip() or "The quick brown fox jumps over the lazy dog."
+        
+        pos_results = analyze_sentence(sentence)
+        
+        display_results(pos_results)
+        
+        readability_score, grade_level = calculate_readability(sentence)
+        
+        print(f"Dale-Chall Readability Score: {readability_score:.2f}")
+        print(f"Grade Level: {grade_level}")
 
-    pos_results = analyze_sentence(sentence)
-    
-
-    display_results(pos_results)
-    
-
-    readability_score, grade_level = calculate_readability(sentence)
-    
-    print(f"Dale-Chall Readability Score: {readability_score:.2f}")
-    print(f"Grade Level: {grade_level}")
+        # Add a prompt to allow the user to continue without clearing the console
+        print("\nType 'exit' to quit or press Enter to analyze another sentence.")
+        if input().strip().lower() == 'exit':
+            break
