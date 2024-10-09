@@ -8,13 +8,21 @@ Introducing the Readability Analyzer Plugin for HexChat!
 ## Why Choose the Readability Analyzer?
 
 
-Enhanced Understanding: In an age where information overload is common, our plugin helps you gauge the readability of chat messages. It converts complex language into actionable insights, ensuring your discussions are accessible to all participants.
+Enhanced Understanding:
 
-OSINT-Ready: For those in the OSINT (Open Source Intelligence) community, this tool is invaluable. It enables analysts to quickly evaluate the communication styles of users, allowing for better interpretation of messages and the development of effective communication strategies.
+In an age where information overload is common, our plugin helps you gauge the readability of chat messages. It converts complex language into actionable insights, ensuring your discussions are accessible to all participants.
 
-User-Friendly Interface: The plugin seamlessly integrates with HexChat, providing immediate feedback on message clarity. Simply chat away, and let the Readability Analyzer do the heavy lifting!
+### OSINT-Ready: 
 
-Engaging Metrics: After every 50 messages, receive a detailed report on each user’s average readability score, including their corresponding grade level. Whether you’re collaborating with peers or engaging in public forums, you'll always know how accessible your conversation is.
+For those in the OSINT (Open Source Intelligence) community, this tool is invaluable. It enables analysts to quickly evaluate the communication styles of users, allowing for better interpretation of messages and the development of effective communication strategies.
+
+### User-Friendly Interface:
+
+The plugin seamlessly integrates with HexChat, providing immediate feedback on message clarity. Simply chat away, and let the Readability Analyzer do the heavy lifting!
+
+### Engaging Metrics: 
+
+After every 50 messages, receive a detailed report on each user’s average readability score, including their corresponding grade level. Whether you’re collaborating with peers or engaging in public forums, you'll always know how accessible your conversation is.
 
 ## Key Features:
 
