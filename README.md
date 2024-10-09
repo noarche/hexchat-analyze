@@ -56,4 +56,7 @@ Elevate your communication strategy with the Readability Analyzer Plugin for Hex
 
 # Notes
 
-    LocalMain.py is the local version of the script. It allows the user to run the script and analyze text, without connection to hexchat or irc. It does not monitor hexchat, nor is it needed to run the hexchat script. 
+    LocalMain.py is the local version of the script. 
+    It allows the user to run the script and analyze text, 
+    without connection to hexchat or irc. It does not monitor hexchat, 
+    nor is it needed to run the hexchat script. 
