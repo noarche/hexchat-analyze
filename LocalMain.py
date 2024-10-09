@@ -1,8 +1,10 @@
 import spacy
 from collections import defaultdict
 import textstat
+import enchant
 
 nlp = spacy.load("en_core_web_sm")
+english_dict = enchant.Dict("en_US")  # Using PyEnchant to check for valid English words
 
 def analyze_sentence(sentence):
     """
@@ -44,12 +46,24 @@ def display_results(pos_dict):
 
 def calculate_readability(sentence):
     """
-    Calculate the readability score using the Dale-Chall readability formula.
+    Calculate the readability score using the Dale-Chall readability formula, 
+    but ignore made-up or non-dictionary words.
     
     :param sentence: The sentence to calculate readability for
-    :return: Dale-Chall readability score and the corresponding grade level
+    :return: Adjusted Dale-Chall readability score and the corresponding grade level
     """
-    readability_score = textstat.dale_chall_readability_score(sentence)
+    # Tokenize sentence and check if words are valid English words
+    words = sentence.split()
+    valid_words = [word for word in words if english_dict.check(word)]
+    
+    if not valid_words:  # If all words are invalid, return lowest possible readability score
+        return 0, "4th Grade or below"
+    
+    # Recreate sentence with only valid words
+    valid_sentence = ' '.join(valid_words)
+    
+    # Calculate readability score on valid sentence
+    readability_score = textstat.dale_chall_readability_score(valid_sentence)
     
     if readability_score <= 4.9:
         grade_level = "4th Grade or below"

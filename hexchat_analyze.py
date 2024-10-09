@@ -1,20 +1,41 @@
 import hexchat
 import spacy
 import textstat
+import enchant
 
 nlp = spacy.load("en_core_web_sm")
+english_dict = enchant.Dict("en_US")
 
 user_scores = {}
 message_count = 0
 
+def filter_valid_words(sentence):
+    """
+    Filters out non-English words from the sentence using PyEnchant.
+
+    :param sentence: The sentence to filter
+    :return: A sentence containing only valid English words
+    """
+    words = sentence.split()
+    valid_words = [word for word in words if english_dict.check(word)]
+    
+    return ' '.join(valid_words)
+
 def calculate_readability(sentence):
     """
     Calculate the readability score using the Dale-Chall readability formula.
+    Filters out non-English words before the calculation.
     
     :param sentence: The sentence to calculate readability for
     :return: Dale-Chall readability score
     """
-    readability_score = textstat.dale_chall_readability_score(sentence)
+    valid_sentence = filter_valid_words(sentence)
+    
+    
+    if not valid_sentence:
+        return 0
+    
+    readability_score = textstat.dale_chall_readability_score(valid_sentence)
     return readability_score
 
 def score_to_grade_level(score):
@@ -79,3 +100,4 @@ hexchat.prnt("Readability Analyzer Plugin Loaded - Analyzing each user's message
 __module_name__ = "Readability Analyzer"
 __module_version__ = "1.0"
 __module_description__ = "Analyzes sentence readability for each user and tracks their average score for you."
+
