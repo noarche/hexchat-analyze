@@ -8,7 +8,7 @@ Introducing the Readability Analyzer Plugin for HexChat!
 ## Why Choose the Readability Analyzer?
 
 
-Enhanced Understanding:
+### Enhanced Understanding:
 
 In an age where information overload is common, our plugin helps you gauge the readability of chat messages. It converts complex language into actionable insights, ensuring your discussions are accessible to all participants.
 
