@@ -35,9 +35,9 @@ Elevate your communication strategy with the Readability Analyzer Plugin for Hex
 
 ## Steps to install
 
-    pip install spacy
-    pip install textstat
-    pip install pyenchant
+    python3 -m pip install spacy
+    python3 -m pip install textstat
+    python3 -m pip install pyenchant
     python3 -m spacy validate
     python3 -m spacy download en_core_web_sm
     sudo mv ./hexchat_analyze.py ./.config/hexchat/addons/
