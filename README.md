@@ -1,7 +1,4 @@
 # hexchat-analyze
-Introducing the Readability Analyzer Plugin for HexChat!
-
-
  Unlock the power of clear communication with the Readability Analyzer Plugin. This innovative tool harnesses advanced Natural Language Processing (NLP) and the Dale-Chall readability formula to assess the clarity of messages in real-time within your IRC chat.
 
 
@@ -41,12 +38,9 @@ Elevate your communication strategy with the Readability Analyzer Plugin for Hex
     pip install spacy
     pip install textstat
     pip install pyenchant
-    pip install https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.5.0/en_core_web_sm-3.5.0.tar.gz
     python3 -m spacy validate
     python3 -m spacy download en_core_web_sm
     sudo mv ./hexchat_analyze.py ./.config/hexchat/addons/
-
-
     /py load hexchat_analyze.py
     /py unload hexchat_analyze.py
 
