@@ -1,6 +1,6 @@
 # Updated 
 
-hexchat_analyze_db.py uses mysql/mariadb.
+hexchat_analyze_db.py uses mariadb and mysql connector
 
 Much better results. 
 
