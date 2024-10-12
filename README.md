@@ -1,3 +1,10 @@
+# Updated 
+
+hexchat_analyze_db.py uses mysql/mariadb.
+
+Much better results. Also you must type `/SHOWSCORE` to get a private message with user stats now. `/SHOWSCORECHAT` will send a message with stats to public chat. `/SHOWUS` will show the total amount of messages from each user. 
+
+
 # hexchat-analyze
  Unlock the power of clear communication with the Readability Analyzer Plugin. This innovative tool harnesses advanced Natural Language Processing (NLP) and the Dale-Chall readability formula to assess the clarity of messages in real-time within your IRC chat.
 
