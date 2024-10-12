@@ -8,7 +8,7 @@ import os
 
 __module_name__ = "Readability Score Script"
 __module_version__ = "1.8"
-__module_description__ = "Calculates readability score with grade levels for each user using the Dale-Chall formula. Type slash showscores to see all user scores. Build Date OCT 12 2024. 1337s.i2p"
+__module_description__ = "Calculates readability score with grade levels for each user using the Dale-Chall formula. Type slash /SHOWSCORES to see all user scores. Build Date OCT 12 2024."
 
 # Load English tokenizer, tagger, parser, NER, and POS tagger
 nlp = spacy.load("en_core_web_sm")
@@ -18,10 +18,10 @@ CACHE_FILE = "scores_cache.json"
 
 # Hardcoded database credentials
 DB_CONFIG = {
-    'host': 'localhost',         # Replace with your database host
-    'user': 'uername_Here',     # Replace with your database user
-    'password': 'pass_Here', # Replace with your database password
-    'database': 'db_name_here'  # Replace with your database name
+    'host': 'localhost',
+    'user': 'USERNAME',
+    'password': 'PASSWORD',
+    'database': 'DBNAME'
 }
 
 # Create tables if they do not exist
@@ -41,7 +41,6 @@ def create_tables_if_not_exists(connection):
 
 # Database connection setup with pooling
 def get_db_connection():
-    # Connection pool setup
     pool = mysql.connector.pooling.MySQLConnectionPool(
         pool_name="mypool",
         pool_size=5,
@@ -62,6 +61,30 @@ def get_db_connection():
     
     return connection
 
+# Log incoming chat messages
+def log_message(word, word_eol, userdata):
+    user = word[0]
+    message = word[1]
+    
+    connection = get_db_connection()
+    if connection is None:
+        return hexchat.EAT_NONE  # Do not consume the event if logging fails
+
+    cursor = connection.cursor()
+    try:
+        cursor.execute("INSERT INTO chat_messages (user, message) VALUES (%s, %s)", (user, message))
+        connection.commit()
+    except Exception as e:
+        hexchat.prnt(f"Failed to log message: {e}")
+    finally:
+        cursor.close()
+        connection.close()
+    
+    return hexchat.EAT_NONE  # Allow the message to pass through
+
+# Hook to capture all channel messages
+hexchat.hook_print("Channel Message", log_message)
+
 # Load cached results if available
 def load_cached_scores():
     if os.path.exists(CACHE_FILE):
@@ -79,21 +102,17 @@ def calculate_user_scores():
     cached_scores = load_cached_scores()
     connection = get_db_connection()
     if connection is None:
-        return {}, "Database connection failed. Please check config.txt."  # Changed to return an empty dict
+        return {}, 0  # Return an empty dictionary and 0 total messages
 
     cursor = connection.cursor()
-    
-    # Use prepared statement to fetch messages
     cursor.execute("SELECT user, message FROM chat_messages")
     messages = cursor.fetchall()
-    
     cursor.close()
     connection.close()
 
     if not messages:
-        return {}, "No messages available to calculate scores."  # Changed to return an empty dict
+        return {}, 0  # Return an empty dictionary and 0 total messages
 
-    # Group messages by user and count total messages
     user_messages = {}
     total_messages = len(messages)
     for user, message in messages:
@@ -101,7 +120,6 @@ def calculate_user_scores():
             user_messages[user] = []
         user_messages[user].append(message)
 
-    # Calculate scores per user
     user_scores = {}
     for user, msgs in user_messages.items():
         if user in cached_scores:
@@ -116,11 +134,8 @@ def calculate_user_scores():
             dale_chall_score = textstat.dale_chall_readability_score(" ".join(msgs))
             grade_level = map_score_to_grade_level(dale_chall_score)
             user_scores[user] = (dale_chall_score, grade_level)
-        
-            # Update cache with new score
             cached_scores[user] = (dale_chall_score, grade_level)
 
-    # Save updated cache
     save_scores_to_cache(cached_scores)
     return user_scores, total_messages
 
@@ -141,35 +156,35 @@ def map_score_to_grade_level(score):
     else:
         return "College level"
 
-# Handle '/showscores' command (private message)
+# Handle '/SHOWSCORES' command
 def handle_showscores_command(word, word_eol, userdata):
     user_scores, total_messages = calculate_user_scores()
     
-    if total_messages is None:
-        hexchat.emit_print("Notice", "Private", user_scores)  # This is the error message
-    else:
-        # Create a formatted message with total messages and scores for all users
-        scores_message = f"Total Messages Analyzed: {total_messages}\n" + \
-                         "Readability scores:\n" + \
-                         "\n".join(f"{user}: {score:.2f} ({grade_level})" for user, (score, grade_level) in user_scores.items())
-        hexchat.emit_print("Notice", "Private", scores_message)
+    if not user_scores and total_messages == 0:
+        hexchat.emit_print("Notice", "Private", "No messages available to calculate scores.")
+        return hexchat.EAT_ALL
+
+    scores_message = f"Total Messages Analyzed: {total_messages}\n" + \
+                     "Readability scores:\n" + \
+                     "\n".join(f"{user}: {score:.2f} ({grade_level})" for user, (score, grade_level) in user_scores.items())
+    hexchat.emit_print("Notice", "Private", scores_message)
     return hexchat.EAT_ALL
 
-# Handle '/showscoreschat' command (chat response)
+# Handle '/SHOWSCORESCHAT' command
 def handle_showscoreschat_command(word, word_eol, userdata):
     user_scores, total_messages = calculate_user_scores()
     
-    if total_messages is None:
-        hexchat.command(f"SAY {user_scores}")  # This is the error message
-    else:
-        # Create a formatted message with total messages and scores for all users
-        scores_message = f"Total Messages Analyzed: {total_messages}\n" + \
-                         "Readability scores:\n" + \
-                         ", ".join(f"{user}: {score:.2f} ({grade_level})" for user, (score, grade_level) in user_scores.items())
-        hexchat.command(f"SAY {scores_message}")
+    if not user_scores and total_messages == 0:
+        hexchat.command(f"SAY No messages available to calculate scores.")
+        return hexchat.EAT_ALL
+
+    scores_message = f"Total Messages Analyzed: {total_messages}\n" + \
+                     "Readability scores:\n" + \
+                     ", ".join(f"{user}: {score:.2f} ({grade_level})" for user, (score, grade_level) in user_scores.items())
+    hexchat.command(f"SAY {scores_message}")
     return hexchat.EAT_ALL
 
-# Handle '/showus' command (private message with total messages and percentage)
+# Handle '/SHOWUS' command
 def handle_showus_command(word, word_eol, userdata):
     connection = get_db_connection()
     if connection is None:
@@ -188,7 +203,6 @@ def handle_showus_command(word, word_eol, userdata):
         hexchat.emit_print("Notice", "Private", "No messages found.")
         return hexchat.EAT_ALL
 
-    # Count messages per user
     user_message_count = {}
     for user, in messages:
         if user in user_message_count:
@@ -196,9 +210,7 @@ def handle_showus_command(word, word_eol, userdata):
         else:
             user_message_count[user] = 1
 
-    # Create the response message
-    response_message = f"Total Messages: {total_messages}\n"
-    response_message += "User Contributions (% of Total):\n"
+    response_message = f"Total Messages: {total_messages}\nUser Contributions (% of Total):\n"
 
     for user, count in user_message_count.items():
         percentage = (count / total_messages) * 100
