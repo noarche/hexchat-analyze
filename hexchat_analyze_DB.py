@@ -137,11 +137,6 @@ def get_average_readability_from_db(username):
         return 0
 
 def on_message(word, word_eol, userdata):
-    """
-    Event handler for when a message is received in the IRC chat.
-    Analyzes the readability of the message, logs it to the database, 
-    and calculates average readability based on all messages for the user.
-    """
     global message_count
 
     username = word[0]
@@ -151,6 +146,11 @@ def on_message(word, word_eol, userdata):
     
     # Log the message to the database
     log_message_to_db(username, message, readability_score)
+    
+    # Update user scores
+    if username not in user_scores:
+        user_scores[username] = []
+    user_scores[username].append(readability_score)
     
     message_count += 1
     
@@ -167,10 +167,12 @@ def on_message(word, word_eol, userdata):
         
         hexchat.command(f"MSG {hexchat.get_info('nick')} --- End of Average Readability Scores ---\n")
         
-        # Reset message count to 0 for the next batch
+        # Reset message count and user scores for the next batch
         message_count = 0
+        user_scores.clear()
 
     return hexchat.EAT_NONE
+
 
 
 # Initialize the database
