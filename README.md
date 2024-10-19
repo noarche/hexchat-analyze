@@ -4,6 +4,9 @@ hexchat_analyze_db.py uses mariadb and mysql connector
 
 Much better results. 
 
+![20241019 153703-Sat October 19 2024 0337PM](https://github.com/user-attachments/assets/f450c9dc-d263-4630-a4a5-617b8146ce2f)
+
+
 # hexchat-analyze
  Unlock the power of clear communication with the Readability Analyzer Plugin. This innovative tool harnesses advanced Natural Language Processing (NLP) and the Dale-Chall readability formula to assess the clarity of messages in real-time within your IRC chat.
 
