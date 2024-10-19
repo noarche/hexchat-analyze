@@ -73,17 +73,8 @@ Elevate your communication strategy with the Readability Analyzer Plugin for Hex
     without connection to hexchat or irc. It does not monitor hexchat, 
     nor is it needed to run the hexchat script. 
 
-# Additional Scripts
+    Best to use Database version and GUI to view accurate results.
 
-### User_Metrics.py
-
-This script sends a private message every hour at :01 with user metrics in the format:
-
-    -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- 
-    User Metrics:
-    user1: 25 messages, 3 connects, 1 disconnects, 5 away changes, 15.50 min away, 30.00% away, Known Aliases: user1, user2 
-    user2: 40 messages, 2 connects, 0 disconnects, 3 away changes, 5.00 min away, 10.00% away, Known Aliases: user3 
-    -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
 # ꧁꧂  Buy me a coffee ☕
 
